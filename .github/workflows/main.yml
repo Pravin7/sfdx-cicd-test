@@ -17,7 +17,7 @@ jobs:
             - name: 'Checkout source code'
               uses: actions/checkout@v2
 
-            - name: 'Build and Deploy'
+            - name: sfdx-orgdev-build-deploy
               uses: tiagonnascimento/sfdx-orgdev-build-deploy@v2
               with:
                 type: 'sandbox'
