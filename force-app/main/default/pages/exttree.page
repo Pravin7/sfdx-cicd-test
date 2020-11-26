@@ -1,0 +1,56 @@
+<apex:page >
+<c:ExtJs_imports >
+</c:ExtJs_imports>
+<script type="text/javascript">
+    Ext.require([
+        'Ext.tree.*',
+        'Ext.data.*',
+        'Ext.tip.*'
+    ]);
+    
+    Ext.onReady(function() {
+        
+        var store = Ext.create('Ext.data.TreeStore', {
+            proxy: {
+                type: 'ajax',
+                url: '/extaccountpage2/treejson'
+            },      
+            root: {
+                expanded: true
+            },
+            folderSort: true,
+            sorters: [{
+                property: 'text',
+                direction: 'ASC'
+            }]
+        });
+    
+        var tree = Ext.create('Ext.tree.Panel', {
+            store: store,
+            renderTo: 'tree-div',
+            height: 300,
+            width: 250,
+            title: 'Files',
+            useArrows: true,
+            dockedItems: [{
+                xtype: 'toolbar',
+                items: [{
+                    text: 'Expand All',
+                    handler: function(){
+                        tree.expandAll();
+                    }
+                }, {
+                    text: 'Collapse All',
+                    handler: function(){
+                        tree.collapseAll();
+                    }
+                }]
+            }]
+        });
+        
+        console.log(store.getRootNode());
+    });
+</script>
+
+<div id="tree-div"></div>
+</apex:page>

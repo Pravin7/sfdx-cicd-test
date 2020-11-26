@@ -1,0 +1,140 @@
+<apex:page Controller="ExtMultiEditController">
+<c:ExtJs_imports />
+
+<script type="text/javascript">
+    var allAccountsJson = {!accountJson};
+    var allAccountJsonEmpty = { total: '0',results: [] };
+    console.log(allAccountsJson);
+    Ext.onReady(function () { 
+    
+        Ext.define('results', {
+        extend: 'Ext.data.Model',
+        fields: [
+            {name: 'id',  type: 'string'},
+            {name: 'name',   type: 'string'}
+        ]
+    });
+        
+      var store = Ext.create('Ext.data.Store', {
+            storeId: 'myStore',     
+            pageSize: 3,
+   //       totalProperty: 'total',
+            model  : 'results', 
+            root: 'results',  
+   //         fields: ['id', 'name'],
+  //           autoLoad: true,
+              proxy: {
+                type: 'memory',
+                autoSync:true,
+                enablePaging: true, 
+                reader: {
+                    type: 'json',
+                    root: 'results'
+                },writer: {
+                    type: 'json',
+                    root: 'results'
+                }        },                
+                listeners: {
+                load: function() {
+                }
+            },
+            data : allAccountsJson
+        });
+      
+      var pagingBar = new Ext.PagingToolbar({
+            store: store,
+            displayInfo: true,
+            displayMsg: 'Displaying Accounts {0} - {1} of {2}',
+            emptyMsg: "No Accounts to display"
+        });
+        
+            var grid = new Ext.create('Ext.grid.Panel', {
+                title: 'Accounts',
+                store: store,
+                viewConfig: {emptyText: 'No Accounts Available',deferEmptyText: false,markDirty: false},
+                columns: [{
+                    header: 'Id',
+                    dataIndex: 'id',
+                    editor: 'textfield'
+                }, {
+                    header: 'Name',
+                    dataIndex: 'name',
+                    flex: 1,
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    }
+                }
+                ],
+                plugins: [
+                Ext.create('Ext.grid.plugin.RowEditing', {
+                    clicksToEdit: 1,
+                    pluginId: 'rowEditing'                          
+                })],
+                height: 200,
+                width: 400,
+                loadMask: true,
+                renderTo: "my_div",  
+                bbar: pagingBar
+                });
+                
+             grid.on('beforeedit', function(e) {
+                    grid.getPlugin('rowEditing').editor.form.findField('id').disable();
+             });
+             
+             grid.on('edit', function(editor, e) {
+                                 
+                   var editedRecords = grid.getStore().getUpdatedRecords();
+                   console.log(editedRecords[0]); 
+                   updatedValue = editedRecords[0].data.name;
+                   updatedId = editedRecords[0].data.id;
+                   updateIndex = editedRecords[0].index;
+                   record = fixColon(updatedValue);
+                   alert(record);
+                    for(key in allAccountsJson) {
+                        if(key == 'results') {
+                                allAccountsJson.results[updateIndex].name = record;
+                                console.log(allAccountsJson.results[updateIndex].name);
+                                //  ajax request here to save all
+                                record = updatedId + ':' +record;
+                                callupdate(record);
+                                
+                        }
+                    }                      
+                });
+                
+             Ext.create('Ext.Button', {
+                text: 'Save',
+                renderTo: Ext.getBody(),        
+                handler: function() {
+                    alert('You clicked the button!')
+                }
+            });   
+   });
+   
+   function fixColon(updatedValue) {
+       updatedValueNoColon = updatedValue;
+       if(updatedValue.indexOf(':') !== -1) {
+           var indexOfColon = updatedValue.indexOf(':');
+           updatedValueNoColon = updatedValue.replaceAt(indexOfColon, "-")
+       }
+       return updatedValueNoColon;
+   }
+   
+     String.prototype.replaceAt=function(index, character) {
+      return this.substr(0, index) + character + this.substr(index+character.length);
+   }
+
+</script>
+    <div id="my_div"></div>
+    <div id="a"></div>
+    <div id="b"></div>
+    <div id="c"></div>
+    
+    <apex:form >
+        <apex:actionFunction name="callupdate" action="{!updateAccountNew}" reRender="a" >
+            <apex:param name="record" assignTo="{!myrecord}" value="{!$CurrentPage.parameters.record}" />
+        </apex:actionFunction>
+        <apex:outputLabel >{!$CurrentPage.parameters.record}</apex:outputLabel>
+   </apex:form>
+</apex:page>

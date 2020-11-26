@@ -1,0 +1,10 @@
+<apex:page standardController="Merchandise1__c">
+ <apex:sectionHeader title="Merchandise1__c" subtitle="{!Merchandise1__c.name}"/> 
+ <apex:pageBlock title="Merchandise1__c"> <apex:pageBlockSection title="Information" columns="2"> 
+ <apex:outputField title="Merchandise Name" value="{!Merchandise1__c.Name}"/> 
+ <apex:outputField title="Owner" value="{!Merchandise1__c.OwnerId}"/> 
+ <apex:outputField title="Description" value="{!Merchandise1__c.Description__c}"/> 
+ <apex:outputField title="Price" value="{!Merchandise1__c.Price__c}"/>
+  <apex:outputField title="Total Inventory" value="{!Merchandise1__c.Total_Inventory__c}"/>
+   </apex:pageBlockSection> </apex:pageBlock> 
+</apex:page>

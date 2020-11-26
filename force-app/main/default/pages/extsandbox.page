@@ -1,0 +1,49 @@
+<apex:page >
+<apex:includeScript value="{!URLFOR($Resource.ExtJs4, 'ext-all-debug.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.ExtJs4, '/src/ux/CheckColumn.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ExtJs4, '/resources/css/ext-all.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.checkbcssn, '/checkbcss/CheckHeader.css')}"/>
+
+
+<div id="a"></div>
+<div id="b"></div>
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+            var item = Ext.create('Ext.Button', {
+            text: 'Sample',
+            menu: [{text: 'Menu Button 1'},{text: 'Menu Button 1'},{text: 'Menu Button 1'}],
+            handler: function() {
+                        //   buildSubAppPanel(itemKey);
+                        
+            }
+        });
+        
+    
+    
+     MyPanel = Ext.extend(Ext.Panel, {
+            constructor: function(config) {
+                Ext.apply(this, { 
+                    // Put your pre-configured config options here
+                    width: 300,
+                    height: 100,              
+                    items : [{
+                            xtype: 'button',
+                            text: 'Sample'
+                  //          menu: [{text: 'Menu Button 1'},{text: 'Menu Button 1'},{text: 'Menu Button 1'}],
+                  //          handler: function() {
+                                //   buildSubAppPanel(itemKey);                            
+                  //          }
+                  }]                
+                });
+                MyPanel.superclass.constructor.apply(this, arguments);
+            }
+        });
+        
+        
+      var myp = new MyPanel({renderTo: "a"});
+     
+
+</script>
+
+</apex:page>

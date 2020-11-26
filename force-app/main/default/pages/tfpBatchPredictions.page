@@ -1,0 +1,39 @@
+<apex:page standardController="Account" recordSetVar="records" id="thePage" > 
+    <apex:form id="theForm"> 
+        <apex:pageBlock id="thePageBlock"> 
+            <apex:pageBlockTable value="{!records}" var="record" id="thePageBlockTable">
+                <apex:column >
+                    <apex:outputField value="{!record.Name}" id="WeekNo" /> 
+                </apex:column> 
+                <apex:column >
+                    <apex:outputField value="{!record.Name}" id="Monday" /> 
+                    <apex:facet name="header">Monday</apex:facet>
+                </apex:column>
+                <apex:column >
+                    <apex:outputField value="{!record.Type}" id="Tuesday" /> 
+                    <apex:facet name="header">Tuesday</apex:facet>
+                </apex:column>
+                <apex:column >
+                    <apex:outputField value="{!record.Type}" id="Wednesday" /> 
+                    <apex:facet name="header">Wednesday</apex:facet>
+                </apex:column>
+                <apex:column >
+                    <apex:outputField value="{!record.Type}" id="Thursday" /> 
+                    <apex:facet name="header">Thursday</apex:facet>
+                </apex:column>
+                <apex:column >
+                    <apex:outputField value="{!record.Type}" id="Friday" /> 
+                    <apex:facet name="header">Friday</apex:facet>
+                </apex:column>                                                
+
+                <apex:inlineEditSupport event="ondblClick" 
+                        showOnEdit="saveButton,cancelButton" hideOnEdit="editButton" /> 
+            </apex:pageBlockTable> 
+            <apex:pageBlockButtons > 
+                <apex:commandButton value="Edit" action="{!save}" id="editButton" />
+                <apex:commandButton value="Save" action="{!save}" id="saveButton" />
+                <apex:commandButton value="Cancel" action="{!cancel}" id="cancelButton" />
+            </apex:pageBlockButtons> 
+        </apex:pageBlock> 
+    </apex:form>
+</apex:page>

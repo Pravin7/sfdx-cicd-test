@@ -1,0 +1,22 @@
+<apex:page Controller="SampleController" >
+t1 : {!t1}  <br/>
+
+t2 : {!t2}  <br/>
+    <apex:form >
+        <apex:commandLink value="refresh"/>
+   
+    
+    <br/>
+    <apex:pageBlock title="Current position">
+        <apex:pageBlockSection title="details" >
+            <apex:detail subject="{!pos.id}" relatedList="false" showChatter="false" />
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock title="All Positions">
+        <apex:pageBlockSection >
+        
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:commandLink title="mysave" value="something" action="{!mysave}"/>   
+     </apex:form>
+</apex:page>

@@ -1,0 +1,145 @@
+<apex:page docType="html-5.0" cache="false" controller="MassUserUpdatesPageController" sidebar="false">
+    <!-- Required Javascripts -->
+
+    <apex:includeScript value="{!URLFOR($Resource.JqueryLibs, 'jquery1_9_1.resource')}"/>                           <!-- http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js-->
+    <apex:includeScript value="{!URLFOR($Resource.JqueryLibs, 'jqueryui_1_10_2_custom.resource')}"/>               <!-- http://code.jquery.com/ui/1.10.2/jquery-ui.js-->   
+    <apex:includeScript value="{!URLFOR($Resource.JqueryLibs, 'jquery_corner_js.resource')}"/>                     <!-- https://raw.github.com/malsup/corner/master/jquery.corner.js-->
+    <apex:includeScript value="{!URLFOR($Resource.JqueryLibs, 'bPopUpJS.resource')}"/> 
+    <apex:includeScript value="{!URLFOR($Resource.MassUserResources, 'JS/UserUpdateActions.js')}"/>
+           
+    <!-- Required Styles --> 
+    <apex:stylesheet value="{!URLFOR($Resource.MassUserResources, 'Styles/UserUpdateStyles.css')}"/> 
+   
+    <div id="mainDiv" style="overflow-x: auto;">
+        <apex:form > 
+             <apex:pageBlock id="UserDetails" mode="maindetail" >           
+                 <apex:pageMessages id="pageMessagesId" ></apex:pageMessages>
+                 <!-- page block -->   
+                 <apex:outputPanel id="usersListContainer" rendered="{! if(userWrappersList.size > 0, true, false)}" >                     
+                  <!-- Table to render user wrapper's list -->
+                 <apex:pageblockTable value="{!userWrappersList}" var="wrapper" id="pbTableId">                                                                            
+                      <apex:facet name="header"> 
+                          <apex:outputPanel id="showbuttons">
+                              <div id="headerpanel" class="headerBlock" >                                                                       
+                               <!-- Table to show filter options-->
+                                   <table style="border-collapse:collapse;" cellspacing="0" cellpadding="0">
+                                       <tr>
+                                           <td style="border:0;" colspan="4">
+                                                <apex:outputPanel id="showbuttons565">
+                                                    <apex:image url="{!URLFOR($Resource.MassUserResources, 'Images/people-icon.png')}" styleClass="pepopleLogo"/>              
+                                                    <apex:outputLabel styleClass="title">Mass Activate / Deactivate Users</apex:outputLabel>
+                                                    <br/><br/>    
+                                                 </apex:outputPanel>
+                                            </td>
+                                        </tr>
+                                        <tr>                    
+                                            <td style="border:0;" >View: </td>                
+                                            <td style="border:0;" >
+                                                <apex:selectList value="{!userView}" size="1" onchange="showUsers();showProcessingRing('0');">
+                                                    <apex:selectOptions value="{!Users}"/>                    
+                                                </apex:selectList>
+                                            </td>
+                                            <td style="border:0;" >
+                                                <apex:selectList value="{!userRole}" size="1" onchange="showUsers();showProcessingRing('0');">
+                                                    <apex:selectOptions value="{!UsersRole}"/>                
+                                                </apex:selectList> 
+                                            </td>
+                                            <td style="border:0;">
+                                                <apex:selectList value="{!userProfile}" size="1" onchange="showUsers();showProcessingRing('0');">
+                                                    <apex:selectOptions value="{!UsersProfile}"/>
+                                                </apex:selectList>
+                                            </td> 
+                                            <td style="border:0;">     
+                                                <img src="/apexpages/devmode/img/saveStatus.gif" id="processingRingId" style="display:none;"/> 
+                                            </td>
+                                        </tr>
+                                   </table><br/>    
+                              </div>
+                              <hr/> 
+                              <div style="clear:both;"/>
+                              <div id="statusButtonDiv" style="margin:0px auto;">  
+                                  <table style="margin:0px auto;">
+                                      <tr>                                                                          
+                                          <td style="border:0px;">
+                                               <center>
+                                                   <apex:commandButton action="{!activateUsers}" value="Activate" id="active" disabled="{! if(userView != 'All Active Users', false, true)}" onclick="if(!confirm('Are you sure?')){return}else{showProcessingRing('1');}" oncomplete="hideProcessingRing('1');showUsers();showResultsJS('{!resultMessage}');" rerender="UserDetails,resultSummaryId" status="updateStatus"/>                         
+                                                   <apex:commandButton action="{!deactivateUsers}" value="Deactivate" id="deactive" disabled="{!if(userView != 'All Inactive Users', false, true)}" onclick="if(!confirm('Are you sure?')){return}else{showProcessingRing('1');}" oncomplete="hideProcessingRing('1');showUsers();showResultsJS('{!resultMessage}');" rerender="UserDetails,resultSummaryId" status="updateStatus"/>              
+                                                   <apex:commandButton action="{!resetUserPassword}" value="Activate and Reset Password" id="reset" disabled="{!if(userView != 'All Active Users', false, true)}" onclick="if(!confirm('Are you sure?')){return}else{showProcessingRing('1');}" oncomplete="hideProcessingRing('1');showUsers();showResultsJS('{!resultMessage}');" rerender="UserDetails,resultSummaryId" status="updateStatus"/>              
+                                               </center>
+                                           </td>
+                                      </tr>
+                                  </table>
+                              </div>  
+                          </apex:outputPanel>
+                      </apex:facet>
+                     <apex:column headerValue="Action" style="width:1%;">
+                         <apex:facet name="header">
+                             <apex:inputCheckbox id="selectAllCB" onchange="checkAll(this)" value="{!selectAll}"/>
+                         </apex:facet>
+                         <apex:inputCheckbox value="{!wrapper.selected}" id="checkedone" onclick="uncheckAll(this)"></apex:inputCheckbox>
+                     </apex:column>   
+                     <apex:column headerValue="Full Name" style="width:10%" >
+                         <a href="/{!wrapper.userObj.Id}?noredirect=1">{!wrapper.userObj.Name}</a>
+                     </apex:column>
+                     <apex:column headerValue="IsActive" style="width:2%">
+                         <apex:outputField value="{!wrapper.userObj.IsActive}"/> 
+                     </apex:column>
+                     <apex:column headerValue="Alias" style="width:5%"> 
+                         <apex:outPutField value="{!wrapper.userObj.Alias}"/>
+                     </apex:column>
+                     <apex:column headerValue="Username" style="width:12%"> 
+                         <apex:outPutField value="{!wrapper.userObj.Username}"/>
+                     </apex:column>
+                     <apex:column headerValue="User Role" style="width:12%">
+                         <a href="/{!wrapper.userObj.UserRoleId}">{!wrapper.userObj.UserRole.Name}</a>
+                     </apex:column>
+                     <apex:column headerValue="User Profile" style="width:12%" >
+                         <a href="/{!wrapper.userObj.ProfileId}">{!wrapper.userObj.Profile.Name}</a>
+                     </apex:column>
+                     <apex:column headerValue="E-mail" style="width:12%">
+                         <apex:outPutField value="{!wrapper.userObj.Email}"/>
+                     </apex:column>
+                     <apex:column headerValue="E-mail" style="width:12%">
+                         <apex:outPutField value="{!wrapper.userObj.Email}"/>
+                     </apex:column>
+                     <apex:facet name="footer">
+                         <apex:outputPanel id="showpaging" rendered="{! if(userWrappersList.size > 0, true, false)}">                 
+                             <table width="95%" align="center" >            
+                                 <tr align="center">  
+                                    <td align="left" class="recordPageNumDetails" style="border:0;"> 
+                                        <apex:outputLabel value="{!obj.recordsFrom}-{!obj.recordsTo} of {!obj.fetchedRecordCount}" ></apex:outputLabel>
+                                        <span style="padding-left:30px"></span>
+                                        <apex:outputLabel value=" Records Per Page : "></apex:outputLabel>
+                                        <apex:selectList value="{!pageSize}" size="1" onchange="showProcessingRing('0');showUsers()">
+                                            <apex:selectOptions value="{!pageSizeOptions}"/>
+                                        </apex:selectList>  
+                                    </td> 
+                                    <!--Pagination section footer-->
+                                    <td style="border:0;" > 
+                                        <center>
+                                            <apex:commandButton value="|< First " action="{!first}" disabled="{!IF (obj.currentPageNumber == 1, true,false)}" />               
+                                            <apex:commandButton value=" << Previous " action="{!previous}" disabled="{!IF (hasPrevious == false, true,false)}"/>
+                                            <apex:commandButton value=" Next >> " action="{!next}" disabled="{!IF (hasNext == false, true,false)}"/>
+                                            <apex:commandButton value=" Last >|" action="{!last}" disabled="{!IF (obj.currentPageNumber == obj.totalPages, true,false)}"/>
+                                        </center>
+                                    </td>  
+                                    <td align="right" class="recordPageNumDetails" style="border:0;"> 
+                                        <apex:outputLabel value="Page {!obj.currentPageNumber} of {!obj.totalPages}"></apex:outputLabel>
+                                    </td> 
+                                 </tr>
+                             </table>
+                         </apex:outputPanel>
+                     </apex:facet>
+                  </apex:pageblockTable>
+                  </apex:outputPanel>
+                 <!--hidden divs to show results-->
+                 <div id="resultSummaryId" style="background-color:white; cursor:pointer;display:none;padding:30px"></div>
+                 <div id="processingDivId"> </div>      
+                 <apex:outputLabel rendered="{!(userWrappersList.size == 0)}"> No records to display.</apex:outputLabel><br/> 
+             </apex:pageBlock>      
+            <!-- Action function to invoke methods to render records based on the selection -->
+            <apex:actionFunction name="showUsers" action="{!processPageSizeChange}" reRender="UserDetails,showpaging" oncomplete="hideProcessingRing('0');"/><br/>  
+            
+        </apex:form>  
+    </div>
+</apex:page>

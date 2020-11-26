@@ -1,0 +1,22 @@
+<apex:page controller="SmartFilterExampleController">
+     <apex:form >
+    	 <apex:pageBlock >
+             <apex:pageBlockSection >
+             	<SmartFilter:SmartFilter pageCont="{!this}" object="Account" omittedFields="{!testString}"/>
+             </apex:pageBlockSection> 
+             <apex:pageBlockSection >
+             	<SmartFilter:SmartFilter pageCont="{!this}" object="Contact" />
+             </apex:pageBlockSection>  
+             <apex:pageBlockSection >
+             	<SmartFilter:SmartFilter pageCont="{!this}" object="Opportunity" />
+             </apex:pageBlockSection>               
+             <apex:pageBlockSection >
+           		  <apex:commandButton value="Fetch" action="{!fetchAccounts}" rerender="accountList"/>
+             </apex:pageBlockSection>
+            
+             <apex:pageBlockTable value="{!accountList}" var="a" id="accountList">
+            	 <apex:column value="{!a.Name}"/>
+             </apex:pageBlockTable>
+     	</apex:pageBlock>
+     </apex:form>
+</apex:page>

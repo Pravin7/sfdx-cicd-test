@@ -1,0 +1,4 @@
+<apex:page readOnly="true" contentType="application/json" showHeader="false" sidebar="false" standardStylesheets="false"
+controller="SampleJsonController" >
+    <apex:outputText value="{!treeJson}" />
+</apex:page>

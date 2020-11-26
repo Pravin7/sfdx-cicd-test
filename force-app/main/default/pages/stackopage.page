@@ -1,0 +1,98 @@
+<apex:page >
+<c:ExtJs_imports ></c:ExtJs_imports>
+<script type="text/javascript">
+
+Ext.onReady(function () { 
+    Ext.require('Ext.ux.data.PagingMemoryProxy');
+    var data = {
+        Accounts: [
+            {
+                id: 1,
+                name: 'Ed Spencer'
+            },
+            {
+                id: 2,
+                name: 'Abe Elias'
+            }
+            ,
+            {
+                id: 3,
+                name: 'Tom Elias'
+            }
+        ]
+    };
+
+        Ext.define('Account', {
+        extend: 'Ext.data.Model',
+        fields: [
+            {name: 'id',  type: 'string'},
+            {name: 'name',   type: 'string'}
+        ]
+    });
+    
+    var store = Ext.create('Ext.data.Store', {
+            storeId: 'myStore',     
+            pageSize: 2,
+   //       totalProperty: 'total',
+            model  : 'Account', 
+   //         fields: ['id', 'name'],
+  //           autoLoad: true,
+            autoSync: true,
+            data : data,
+              proxy: {
+                type: 'pagingmemory',
+                reader: {
+                    type: 'json',
+                    root: 'Accounts'
+                    }      
+                },                
+                listeners: {
+                load: function() {
+                    alert('k');
+                    grid.getView().setLoading(false);
+                }
+            }
+        });
+        
+         var pagingBar = new Ext.PagingToolbar({
+            store: store,
+            displayInfo: true,
+            displayMsg: 'Displaying Accounts {0} - {1} of {2}',
+            emptyMsg: "No Accounts to display"
+        });
+        
+            var grid = new Ext.create('Ext.grid.Panel', {
+                title: 'Accounts',
+                store: store,
+                viewConfig: {emptyText: 'No Accounts Available',deferEmptyText: false,markDirty: false},
+                columns: [{
+                    header: 'Id',
+                    dataIndex: 'id',
+                    editor: 'textfield'
+                }, {
+                    header: 'Name',
+                    dataIndex: 'name',
+                    flex: 1,
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    }
+                }
+                ],
+                height: 200,
+                width: 400,
+                loadMask: false,
+                renderTo: "my_div",  
+                bbar: pagingBar,
+                
+                plugins: [
+                Ext.create('Ext.grid.plugin.RowEditing', {
+                    clicksToEdit: 1,
+                    pluginId: 'rowEditing'
+                })]
+                }); 
+});
+</script>                               
+<div id='my_div'>
+</div>
+</apex:page>

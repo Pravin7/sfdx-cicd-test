@@ -1,0 +1,106 @@
+<apex:page Controller="StopWatchController" >
+<apex:includeScript value="{!URLFOR($Resource.jquery1_10)}"  />
+
+    <script type="text/javascript">     
+        var time;        
+        var secVal;
+        var minVal;       
+        var houVal;
+        var isStarted = new Boolean(0);
+        var isStoped = new Boolean({!isStoped});
+        
+       function start_timer(btnToChange){       
+       //  var btnToChange = document.getElementById( id );        this is not required
+           if (isStoped == false) {
+               console.log(btnToChange);
+               if(isStarted == 0) {
+                   isStarted = 1; 
+                   btnToChange.value = 'Pause Timer'; 
+                   timer = setInterval ( "increaseCounter()", 1000 );
+                   time = secVal + '#' + minVal + '#' + houVal + '#' + isStoped;              
+                   startClockAct(time);
+               }
+               else {
+                   isStarted = 0;
+                   btnToChange.value = 'Start Timer'; 
+                   window.clearTimeout(timer);
+                   secVal = secVal + 1;
+                   time = secVal + '#' + minVal + '#' + houVal + '#' + isStoped;
+                   stopClockAct(time);           
+               }   
+            }       
+         }
+        
+       function stop_timer() {
+           if (isStoped == false) {      
+                   if (typeof timer != 'undefined') {            // user clicking directly stop button
+                       window.clearTimeout(timer);
+                       secVal = secVal + 1;
+                   } else {
+                       secVal = parseInt($('#counterSec').html(),10) 
+                       minVal = parseInt($('#counterMin').html(),10)
+                       houVal = parseInt($('#counterHour').html(),10)
+                   }
+                   isStarted = 0;
+                   isStoped = true;                // this stops the timer
+                   time = secVal + '#' + minVal + '#' + houVal + '#' + isStoped;
+                   stopClockAct(time); 
+           }               
+        }
+         
+       function increaseCounter(){         
+         secVal = parseInt($('#counterSec').html(),10) 
+         minVal = parseInt($('#counterMin').html(),10)
+         houVal = parseInt($('#counterHour').html(),10)
+         if(secVal != 59)
+         $('#counterSec').html((secVal+1));
+         else{
+          if(minVal != 59){
+           $('#counterMin').html((minVal+1)); 
+          }
+          else{
+           $('#counterHour').html((parseInt($('#counterHour').html(),10)+1));
+           $('#counterMin').html(0);
+          }
+          $('#counterSec').html(0);
+         }
+        } 
+    </script>
+    
+    <apex:form >
+        <div id="innerDiv" style="width:400px;">
+            <apex:pageBlock title="Counter" id="clockBlock">                                    
+                <br/>
+                <div id="counterHour" style="float: left;">
+                    {!hourTime}
+                </div>
+                <div style="float: left;">
+                    &nbsp; Hours &nbsp;
+                </div>
+                <div id="counterMin" style="float: left;">
+                    {!minTime}
+                </div>
+                <div style="float: left;">
+                    &nbsp; minutes &nbsp;
+                </div>
+                <div id="counterSec" style="float: left;">
+                    {!secTime}
+                </div>
+                <div style="float: left;">
+                    &nbsp; seconds &nbsp;&nbsp;&nbsp;
+                </div>    
+                <apex:commandButton value="Start Timer" id="startButton" onclick="start_timer(this)" reRender="none" disabled="{!isStoped}"/>
+                &nbsp;&nbsp;&nbsp;
+                <apex:commandButton value="Stop Timer" id="stopButton" onclick="stop_timer()" reRender="clockBlock" disabled="{!isStoped}"  oncomplete="window.top.location='/{!recId}';"/>
+                
+                <apex:actionFunction name="startClockAct" action="{!startClock}" reRender="none" >     
+                   <apex:param name="time" assignTo="{!timeBundle}" value="" />    
+                </apex:actionFunction>
+                <apex:actionFunction name="stopClockAct" action="{!stopClock}" reRender="clockBlock">     
+                   <apex:param name="time" assignTo="{!timeBundle}" value="" />    
+                </apex:actionFunction>
+            </apex:pageBlock>
+        </div>     
+    </apex:form>
+        
+</apex:page>

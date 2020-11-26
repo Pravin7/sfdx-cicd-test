@@ -1,0 +1,64 @@
+<apex:page >
+<c:ExtJs_imports ></c:ExtJs_imports>
+<script type="text/javascript">
+Ext.QuickTips.init();
+Ext.onReady(function() {
+    var store = Ext.create('Ext.data.TreeStore', {
+        root: {
+            expanded: true,
+            children: [{
+                text: "firstChild",
+                qtip: "This is a First child",                
+                leaf: true
+            }, {
+                text: "secondChild",
+                id: "secondChild",
+                qtip: "This is a Second child",
+                expanded: true,
+                children: [{
+                    text: "grandChild",
+                    qtip: "This is a grand child1", 
+                    leaf: true
+                }, {
+                    text: "grandChild",
+                    qtip: "This is a grand child2", 
+                    leaf: true
+                }]
+            }, {
+                text: "thirdChild",
+                qtip: "This is a third child", 
+                leaf: true
+            }]
+        }
+    });
+
+    Ext.create('Ext.tree.Panel', {
+        title: 'Simple Tree',
+        width: 200,
+        height: 150,
+        store: store,
+        rootVisible: false,
+        renderTo: 'abc'
+    });
+    
+
+    Ext.create('Ext.Button', {
+    text: 'Click me',
+    id:'kk',
+    renderTo: Ext.getBody(),
+    handler: function() {
+        alert('You clicked the button!');
+    }
+    });
+    
+        var tip = Ext.create('Ext.tip.ToolTip', {
+    target: 'secondChild',
+    html: 'Press this button to clear the form'
+    });
+    
+ });
+ 
+</script>
+<div id='abc'>
+</div>
+</apex:page>

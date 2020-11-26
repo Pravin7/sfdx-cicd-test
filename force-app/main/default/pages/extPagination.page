@@ -1,0 +1,165 @@
+<apex:page Controller="ExtMultiEditController">
+    <apex:includeScript value="{!URLFOR($Resource.ExtJs4, 'ext-all-debug.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.ExtJs4, '/src/ux/CheckColumn.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.ExtJs4, '/resources/css/ext-all.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.checkbcssn, '/checkbcss/CheckHeader.css')}" />
+
+    <script type="text/javascript">
+
+var jsonstring = {!accountJson};
+console.log(jsonstring);
+Ext.onReady(function () {    
+    var store = Ext.create('Ext.data.Store', {
+        storeId: 'myStore',     
+        pageSize: 2,
+        totalProperty: 'total', 
+        root: 'results',  
+        fields: ['id', 'name', {name: 'ischecked', type: 'bool'}],
+   //     data : jsonstring,
+          proxy: {
+            type: 'ajax', 
+            url: 'http://pravin-s-developer-edition.ap1.force.com/extaccountpage2/json_test',
+            reader: {
+                type: 'json',
+                totalProperty: "total",
+                root: 'results'
+            },
+            autoLoad: true
+        },                
+            listeners: {
+            load: function() {
+                console.log(store);
+            }
+        }
+    //    data: {!accountJson} 
+    });
+    
+    var pagingBar = new Ext.PagingToolbar({
+        pageSize: 2,
+        store: store,
+        displayInfo: true,
+        displayMsg: 'Displaying opportunities {0} - {1} of {2}',
+        emptyMsg: "No opportunities to display"
+    });
+    
+        var grid = new Ext.create('Ext.grid.Panel', {
+            title: 'Accounts',
+            store: store,
+            columns: [{
+                header: 'Id',
+                dataIndex: 'id',
+                editor: 'textfield'
+            }, {
+                header: 'Name',
+                dataIndex: 'name',
+                flex: 1,
+                editor: {
+                    xtype: 'textfield',
+                    allowBlank: false
+                }
+            },
+            {
+            xtype: 'checkcolumn',
+            header: 'To Save?',
+            dataIndex: 'ischecked',
+            width: 55,
+            stopSelection: false,
+            }
+            ],
+            selType: 'rowmodel',
+            plugins: [
+            Ext.create('Ext.grid.plugin.RowEditing', {
+                clicksToEdit: 1,                          
+            })],
+            height: 200,
+            width: 400,
+            loadMask: true,
+   //        renderTo: "my_div",  
+            bbar: pagingBar
+            });
+        
+        Ext.create('Ext.Button', {
+        text: 'Click to save',
+        handler: function () {
+           var rows = grid.getStore().getRange();
+           console.log(rows);
+               for (i=0;i<rows.length;i++) {
+                    if(rows[i].data.ischecked)
+                       myfunc(rows[i]); 
+               } 
+        }, 
+        renderTo: "b"              
+    });
+    
+    store.load(
+        {params:{start:0, limit:2},
+         callback: function(records, operation, success) {
+            }                
+        }              
+       );
+       
+      var data = [
+    {name: 'jack johnson', text: 'record1'},
+    {name: 'jack johnson', text: 'record2'},
+    {name: 'jack johnson', text: 'record3'},
+    {name: 'jack johnson', text: 'record4'}
+  ];
+
+  var storeNew = Ext.create('Ext.data.Store', {
+    fields: ['name', 'text'],
+    data: data,
+    proxy: {
+      type: 'pagingmemory'
+    },
+    pageSize: 2
+  });
+
+  var gridNew = Ext.create('Ext.grid.Panel', {
+    store: storeNew,
+    id: 'thegrid',
+    renderTo: "my_div",
+    plugins: [{
+      ptype: 'cellediting',
+      clicksToEdit: 1,
+      listeners: {
+        edit: function(editor, e) {
+          //e.record.commit();
+        }
+      }
+    }],
+    columns: [{
+      text: 'Name',
+      dataIndex: 'name',
+      editor: {
+        allowBlank: false
+      }
+    }, {
+      text: 'Text',
+      dataIndex: 'text'
+    }],
+    dockedItems: [{
+      xtype: 'pagingtoolbar',
+      store: storeNew,
+      dock: 'bottom',
+      displayInfo: true
+    }],
+  });   
+       
+});
+
+</script>
+
+    <div id="my_div"></div>
+
+    <apex:form >
+        <apex:actionFunction name="myapexFunc" action="{!updateAccount}"
+            reRender="a">
+            <apex:param name="recordid" assignTo="{!myrecordid}" value="" />
+        </apex:actionFunction>
+    </apex:form>
+
+    <div id="a"></div>
+
+    <div id="b"></div>
+    <div id="c"></div>
+</apex:page>

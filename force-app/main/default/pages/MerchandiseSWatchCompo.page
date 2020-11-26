@@ -1,0 +1,5 @@
+<apex:page showHeader="false" sidebar="false" standardController="Merchandise1__c" extensions="StopWatchController">
+    
+    <c:stopwatchgencomponent recId="{!recId}" ctl="{!ctl}"/>
+
+</apex:page>

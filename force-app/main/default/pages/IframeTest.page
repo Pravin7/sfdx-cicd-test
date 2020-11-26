@@ -1,0 +1,17 @@
+<apex:page >
+  Test iframe
+  
+    <iframe src="https://pravins-dev-ed.my.salesforce.com/home/home.jsp?isdtp=vw" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
+  
+  <!--
+    <apex:iframe src="https://pravins-dev-ed.my.salesforce.com/home/home.jsp?isdtp=vw" scrolling="true" id="theIframe"/>
+  
+  <iframe src="https://www.dropbox.com/sso/32675601103" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
+  
+    <apex:iframe src="https://www.dropbox.com/sso/32675601103" scrolling="true" id="theIframe"  />
+
+  <apex:iframe src="https://pravins-dev-ed.my.salesforce.com/idp/login?app=0sp0o000000CbkB" scrolling="true" id="theIframe"/>
+    -->
+</apex:page>
