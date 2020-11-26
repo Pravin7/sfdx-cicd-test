@@ -1,0 +1,20 @@
+<apex:page controller="ExtcrudController">
+
+<apex:form >
+<apex:actionFunction name="callupdate" action="{!updateAccount}" reRender="a" >
+    <apex:param name="record" assignTo="{!myrecord}" value="{!$CurrentPage.parameters.record}" />
+</apex:actionFunction>
+<apex:outputLabel >{!$CurrentPage.parameters.record}</apex:outputLabel>
+</apex:form>
+
+<script type="text/javascript">
+function findUpdate() {
+callupdate();
+}
+
+findUpdate();
+</script>
+
+<div id="a">
+</div>
+</apex:page>

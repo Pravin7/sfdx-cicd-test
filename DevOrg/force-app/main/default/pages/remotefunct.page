@@ -1,0 +1,44 @@
+<apex:page controller="MyJSControllers">
+
+<apex:form >
+<apex:pageBlock id="theBlock">
+<apex:pageBlockSection >
+    <apex:inputText id="accName" required="true" ondblclick="grabExName()">
+        <script type="text/javascript">
+        function grabExName()
+            {
+            var ex = document.getElementById('{!$Component.accName}').value;
+            alert(ex);
+            
+              var accountNameJS = document.getElementById('{!$Component.accName}').value;
+                            MyJSControllers.getAccount( accountNameJS, function(result, event){
+                                if (event.status) {
+                                    // demonstrates how to get ID for HTML and Visualforce tags
+                                    console.log(result);
+                                    document.getElementById('accid').innerHTML = result.Id;
+                                    document.getElementById('accid1').innerHTML = result.Name;
+                          //          document.getElementById("{!$Component.theBlock.thePageBlockSection.theSecondItem.accEmployees}").innerHTML = result.NumberOfEmployees;
+                                } else if (event.type === 'exception') {
+                                    document.getElementById("errors-js").innerHTML = event.message;
+                                } else {
+                                    document.getElementById("errors-js").innerHTML = event.message;
+                            }
+                        }, {escape:true});
+            }
+        </script>
+    </apex:inputText>
+                          
+    <div id="errors-js"> </div>
+    <apex:pageBlockSectionItem id="theFirstItem">
+    <span id="accid" />
+    <span id="accid1" />
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem id="theSecondItem">
+    <apex:outputText id="accEmployees" />
+    </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+ 
+    </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>

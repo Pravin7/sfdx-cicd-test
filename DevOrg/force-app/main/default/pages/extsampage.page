@@ -1,0 +1,183 @@
+<apex:page controller="ExtSampageCont">
+<apex:includeScript value="{!URLFOR($Resource.ExtJs4, 'ext-all-debug.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.ExtJs4, '/src/ux/CheckColumn.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ExtJs4, '/resources/css/ext-all.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.checkbcssn, '/checkbcss/CheckHeader.css')}"/>
+
+<script type="text/javascript">
+  
+Ext.onReady(function () {
+
+    function insertAtCaret(areaId,text) {
+        var txtarea = Ext.getCmp('mytext').getEl().dom;
+        var el = Ext.getCmp('mytext').getEl();
+        console.log(el);
+        var scrollPos = txtarea.scrollTop;
+        var strPos = 0;
+        var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
+            "ff" : (document.selection ? "ie" : false ) );
+        if (br == "ie") { 
+            txtarea.focus();
+            var range = document.selection.createRange();
+            range.moveStart ('character', -txtarea.value.length);
+            strPos = range.text.length;
+        }
+        else if (br == "ff") strPos = txtarea.selectionStart;
+    
+        var front = (el.value).substring(0,strPos);  
+        var back = (el.value).substring(strPos,txtarea.value.length); 
+        txtarea.value=front+text+back;
+        strPos = strPos + text.length;
+        if (br == "ie") { 
+            txtarea.focus();
+            var range = document.selection.createRange();
+            range.moveStart ('character', -txtarea.value.length);
+            range.moveStart ('character', strPos);
+            range.moveEnd ('character', 0);
+            range.select();
+        }
+        else if (br == "ff") {
+            txtarea.selectionStart = strPos;
+            txtarea.selectionEnd = strPos;
+            txtarea.focus();
+        }
+        txtarea.scrollTop = scrollPos;
+    }  
+
+
+  contextMenu = new Ext.menu.Menu({
+      items: [{
+        text: 'Edit',
+        iconCls: 'edit'
+      }]
+  });
+  
+  contextMenu1 = Ext.create('Ext.menu.Menu', {
+    width: 100,
+    margin: '0 0 10 0',
+    items: [{
+        text: '{!item.id}',
+        value: '{'+'!'+'item.id}',
+        listeners : {
+                click : function( menu, item, e, eOpts ) {            
+                var pos = Ext.getCmp('mytext').getCaretPosition();
+                Ext.getCmp('mytext').setCaretPosition(pos);
+                var pos1 = Ext.getCmp('mytext').getCaretPosition();     
+                alert(pos1);  
+                var cont = Ext.getCmp('mytext').getValue();
+                //
+                var front = cont.substring(0,pos);  
+                var back = cont.substring(pos,cont.length);
+                var text = menu.value;
+                newcont = front+' '+text+' '+back;                
+                //                   
+                console.log('cont : '+newcont);
+                var name = Ext.getCmp('mytext').setValue(newcont);
+                var pos = Ext.getCmp('mytext').getCaretPosition();
+                }
+        }  
+    },{
+        text: '{!item.name}',
+        value: '{'+'!'+'item.name}',
+        listeners : {
+                click : function( menu, item, e, eOpts ) {
+                var pos = Ext.getCmp('mytext').getCaretPosition();
+                Ext.getCmp('mytext').setCaretPosition(pos);
+                var pos1 = Ext.getCmp('mytext').getCaretPosition();     
+                alert(pos1);  
+                var cont = Ext.getCmp('mytext').getValue();
+                //
+                var front = cont.substring(0,pos);  
+                var back = cont.substring(pos,cont.length);
+                var text = menu.value;
+                newcont = front+' '+text+' '+back;                
+                //                   
+                console.log('cont : '+newcont);
+                var name = Ext.getCmp('mytext').setValue(newcont);
+                var pos = Ext.getCmp('mytext').getCaretPosition();
+                }        
+            }
+    },{
+        text: 'regular item 3'
+    }] });
+  
+          Ext.override(Ext.form.field.TextArea, {
+            setCaretPosition: function(pos) {
+                var el = this.inputEl.dom;
+                if (typeof(el.selectionStart) === "number") {
+                    el.focus();
+                    el.setSelectionRange(pos, pos);
+                } else if (el.createTextRange) {
+                    var range = el.createTextRange();
+                    range.move("character", pos);
+                    range.select();
+                } else {
+                    alert('setCaretPosition() not supported');
+                }
+            },
+        
+            getCaretPosition: function() {
+                var el = this.inputEl.dom;
+                if (typeof(el.selectionStart) === "number") {
+                    return el.selectionStart;
+                } else if (document.selection && el.createTextRange){
+                    var range = document.selection.createRange();
+                    range.collapse(true);
+                    range.moveStart("character", -el.value.length);
+                    return range.text.length;
+                } else {
+                    throw 'getCaretPosition() not supported';
+                }
+            }
+        });
+   
+  Ext.create('Ext.form.FormPanel', {
+    title      : 'Sample TextArea',
+    width      : 400,
+    bodyPadding: 10,
+    renderTo   : "abcd",
+    items: [{
+        xtype     : 'textareafield',
+        grow      : true,
+        id        : 'mytext',
+        name      : 'message',
+        fieldLabel: 'Message',
+        anchor    : '100%',
+     //   listeners : {
+     //           focus: function() {
+     //           alert('loaded');
+     //           }
+     //       }   
+    }]
+   });
+   
+   Ext.getCmp('mytext').getEl().on('contextmenu', function(e) {
+     e.preventDefault();
+     contextMenu1.show(Ext.getCmp('mytext').getEl());
+    });
+   
+       var p1 = Ext.get('mytext');
+    p1.animate({
+        to: {
+            x: 500
+        }
+    }).animate({
+        to: {
+            y: 150
+        }
+    }).animate({
+        to: {
+            backgroundColor: '#f00'  //red
+        }
+    }).animate({
+        to: {
+            opacity: 0
+        }
+    });
+   
+ });
+</script>
+
+<div id="abcd">
+</div>
+</apex:page>

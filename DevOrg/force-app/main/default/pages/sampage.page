@@ -1,0 +1,14 @@
+<apex:page sidebar="false">
+<apex:pageBlock title="A Block Title">
+hi
+<apex:form >
+<apex:inputTextarea title="textAreaTitle"/>
+</apex:form>
+<apex:pageBlockSection title="A Section Title"> I'm three components deep!
+</apex:pageBlockSection>
+    <apex:pageBlockSection title="A New Section"> This is another section. here
+</apex:pageBlockSection>
+<apex:pageBlockButtons >
+</apex:pageBlockButtons>
+</apex:pageBlock>
+</apex:page>

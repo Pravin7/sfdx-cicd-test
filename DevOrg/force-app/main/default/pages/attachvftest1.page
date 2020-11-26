@@ -1,0 +1,61 @@
+<apex:page >
+<apex:remoteObjects >
+<apex:remoteObjectModel name="Attachment" jsShorthand="attach" fields="Name,Body,ParentId,ContentType">
+</apex:remoteObjectModel>
+</apex:remoteObjects>
+
+<link rel="stylesheet" type="text/css" media="all" href="css/reset.css" /> <!-- reset css -->
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<style>
+    body{ background-color: ivory; }
+    #canvas{border:1px solid red;}
+</style>
+
+<script type="text/javascript">
+var dataURLinBase = '';
+
+$(function(){   
+    var canvas=document.getElementById("canvas");
+    var ctx=canvas.getContext("2d");
+    
+    $("#fileInput").change(function(e){
+        var URL = window.webkitURL || window.URL;
+        var url = URL.createObjectURL(e.target.files[0]);
+        console.log(e.target.files[0].name);
+        var img = new Image();
+        img.onload = function() {
+                canvas.width=img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img,0,0);
+                dataURLinBase = canvas.toDataURL('image/png');
+                console.log('cosole'+dataURLinBase);
+        }
+        img.src = url;
+    });
+
+    $("#save").click(function(){
+         doSomethingJS();     
+    });
+
+}); // end $(function(){});
+
+function doSomethingJS()
+{
+    var attach = new SObjectModel.Attachment();
+  //  dataURLinBase = dataURLinBase.replace("data:image/png;base64,", "");
+    console.log(dataURLinBase);
+    attach.set('Body',dataURLinBase);
+    attach.set('Name','samplefile');    
+    attach.set('ParentId','50090000009yAkA');    
+    attach.create(function(error, result, event)
+    {
+            alert(error);
+     } );
+}
+</script>
+<body>
+    <input type="file" id="fileInput" />    
+    <button id="save">Save</button><br/>
+    <canvas id="canvas" width="300" height="300"></canvas>
+</body>
+</apex:page>

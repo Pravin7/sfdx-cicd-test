@@ -1,0 +1,7 @@
+<apex:component >
+    <apex:includeScript value="{!URLFOR($Resource.ExtJs4, '/ext-all-debug.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.ExtJs4, '/src/ux/CheckColumn.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.ExtJs4, '/src/ux/PagingMemoryProxy.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.ExtJs4, '/resources/css/ext-all.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.checkbcssn, '/checkbcss/CheckHeader.css')}" />
+</apex:component>

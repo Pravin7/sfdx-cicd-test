@@ -1,0 +1,129 @@
+<apex:page >
+<html>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
+<body>
+    <table width="100%">
+        <tr>
+            <td width="50%"><div id="pipHrUsage"></div></td>
+            <td width="50%"><div id="pipHrUsageVsOther"></div></td>
+        </tr>
+        <tr>
+            <td width="50%"><div id="pipForecastUsage"></div></td>
+            <td></td>
+        </tr>
+    </table>    
+</body>
+<script type="text/javascript">
+    google.load('visualization', '1', {packages: ['corechart']});
+    google.setOnLoadCallback(drawComparativeChart);
+
+    function drawComparativeChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Months');
+      data.addColumn('number', 'Other\'s Usage');
+      data.addColumn('number', 'PIP\'s Usage');
+
+      data.addRows([
+        ['Jan', 32, 56],   ['Feb', 42, 32],  ['Mar', 58, 49],
+        ['Apr', 56, 42],  ['May', 65, 21],  ['Jun', 48, 12],
+        ['Jul', 54, 43],  ['Aug', 34, 36],  ['Sep', 51, 14],
+        ['Oct', 39, 28],  ['Nov', 49, 37], ['Dec', 45, 34]
+      ]);
+
+      var options = {
+        width: 720,
+        height: 280,
+        hAxis: {
+          title: 'Month',
+          logScale: true
+        },
+        vAxis: {
+          title: 'Usage (in Hrs.)',
+          ticks: [0,10,20,30,40,50,60,70,80,90,100],
+          logScale: false
+        },
+        colors: ['#097138', '#7A7CF0'],
+        title: 'Usage for PIP',    
+        legend: { position: 'top' }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('pipHrUsageVsOther'));
+
+      chart.draw(data, options);
+    }
+    google.setOnLoadCallback(drawUsageChart);
+    function drawUsageChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Months');
+      data.addColumn('number', 'Expected Usage');
+      data.addColumn('number', 'Actual Usage');
+
+      data.addRows([
+        ['Jan', 45, 56],   ['Feb', 45, 32],  ['Mar', 45, 49],
+        ['Apr', 45, 42],  ['May', 45, 21],  ['Jun', 45, 12],
+        ['Jul', 45, 43],  ['Aug', 45, 36],  ['Sep', 45, 14],
+        ['Oct', 45, 28],  ['Nov', 45, 37], ['Dec', 45, 34]
+      ]);
+
+      var options = {
+        width: 720,
+        height: 280,
+        hAxis: {
+          title: 'Month',
+          logScale: true
+        },
+        vAxis: {
+          title: 'Usage (in Hrs.)',
+          ticks: [0,10,20,30,40,50,60,70,80,90,100],
+          logScale: false
+        },
+        colors: ['#097138', '#7A7CF0'],
+        title: 'Usage usage for PIP',    
+        legend: { position: 'top' }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('pipHrUsage'));
+
+      chart.draw(data, options);
+    }
+    
+    google.setOnLoadCallback(drawChart);
+    
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Months');
+      data.addColumn('number', 'PIP\'s Usage');
+
+      data.addRows([
+        ['Jan',  550],   ['Feb',  520],  ['Mar',  480],
+        ['Apr', 460],  ['May',  420],  ['Jun',  385],
+        ['Jul',  320],  ['Aug',  256],  ['Sep',  180],
+        ['Oct',  120],  ['Nov',  80], ['Dec',  40]
+      ]);
+
+      var options = {
+        width: 720,
+        height: 280,
+        hAxis: {
+          title: 'Month',
+          logScale: true
+        },
+        vAxis: {
+          title: 'Available Hrs.',
+          ticks: [0,50,100,150,200,250,300,350,400,450,500, 550],
+          logScale: false
+        },
+        colors: ['#097138'],
+        title: 'Usage usage for PIP',    
+        legend: { position: 'top' }
+      };
+
+      var chart = new google.visualization.AreaChart(document.getElementById('pipForecastUsage'));
+
+      chart.draw(data, options);
+    }
+      
+</script>
+</html>
+
+</apex:page>

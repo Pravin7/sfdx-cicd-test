@@ -1,0 +1,336 @@
+<apex:page controller="ExtTabpanelController">
+<apex:includeScript value="{!URLFOR($Resource.ExtJs4, 'ext-all-debug.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.ExtJs4, '/src/ux/CheckColumn.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ExtJs4, '/resources/css/ext-all.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.checkbcssn, '/checkbcss/CheckHeader.css')}"/>
+
+
+    <style type="text/css">
+       .btnC
+        {
+            background: transparent none !important;
+            color:#F79F81 !important;
+            font-weight:bold;            
+        }
+        
+        .x-btn .x-btn-inner
+        {
+            color:#F6D8CE !important;
+            font-weight:bold;
+        }
+        
+        .x-btn BUTTON:focus {                                                 // for button click
+            background: red !important;
+        }   
+             
+        .x-customOverStyle {                                                  // for button hover
+            background: red !important;
+        }
+        .x-btn.my-over {
+            text-decoration:underline;
+        }
+        
+        .x-box-inner.panelk {
+            border: 2px solid blue !important;
+        }
+        
+        .panelC .x-panel-body {
+            border: 4px solid #F79F81 !important;        
+        }
+    </style>
+    
+<script type="text/javascript">
+
+    var appPanel = {
+        'Item1' : {   
+            'SubText11' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText12' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',
+            'SubText13' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText14' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>'            
+        },
+        'Item2' : {
+            'SubText11' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText22' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',
+            'SubText23' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText24' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>'            
+        },
+        'Item3' : {
+            'SubText31' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText32' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',
+            'SubText33' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText34' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>'            
+        },
+        'Item4' : {
+            'SubText41' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText42' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',
+            'SubText43' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText44' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>'            
+        },
+        'Item5' : {
+            'SubText51' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText52' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',
+            'SubText53' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText54' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>'            
+        },
+        'Item6' : {
+            'SubText61' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText62' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',
+            'SubText63' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>',                      
+            'SubText64' : '<iframe src="apex/temp" width="100%" height="100%"><p>Your browser does not support iframes.</p> </iframe>'
+        }                                              
+    };        
+    
+    var bodyStyleForPanel =  "background-image:url({!$Resource.buttonPanel}) !important";
+
+Ext.onReady(function () {
+
+        isButtonClick = 'false'                                          // variable to identify button click or panel body click
+
+        itemButtonAsLink = Ext.extend(Ext.Button,{                                                             //my custom button
+                constructor: function(config){ Ext.apply(this, { cls:'btnC', border:false, overCls: 'my-over'});
+                    itemButtonAsLink.superclass.constructor.apply(this,arguments);
+                    this.on('click',function(){
+                                               isButtonClick = 'true'                                         
+                                              },this);
+                }
+        });
+
+        MyPanel = Ext.extend(Ext.Panel, {                                                                        // my custom panel
+        constructor: function(config) {
+            Ext.apply(this, { 
+                // pre-configured config
+                width: 350,
+                height: 100,
+                overCls : 'panelC',
+                margin: "4 0 0 4",
+                layout: {
+                    align: 'middle',
+                    pack: 'center',
+                    type: 'hbox'
+                },              
+                items: []
+                });
+            MyPanel.superclass.constructor.apply(this, arguments);
+            }
+        });        
+
+   var MyTabPanel = Ext.create('Ext.tab.Panel', {
+        width: 713,
+        height: 400,
+        renderTo: 'a',
+        items: [{
+            title: 'HomeTab',
+            id: 'mainTab',    
+            layout:'column',
+            items: []
+        }]
+    });
+    
+    function visitUrlForItem(itemKey,subItemKey) {
+        var url = appPanel[itemKey][subItemKey];
+        var tabid = itemKey + '_' + subItemKey;
+        var noDuplicate = buildNewTabForMyTabPanel(tabid);        
+        if(noDuplicate == 'true') {
+            var newTab = Ext.getCmp(tabid);
+            newTab.html = url;       
+            MyTabPanel.add(newTab);  
+            MyTabPanel.doLayout();
+        }                  
+    }
+
+    function buildAppPanel() {
+         for(var key in appPanel) {
+               var itemPanel = createMyPanel(key);
+               var mainTab = Ext.getCmp('mainTab');
+                mainTab.add(itemPanel);  
+                mainTab.doLayout();                              
+          }   
+    }
+    
+    function buildNewTabForMyTabPanel(item) {            
+            var checkTab = Ext.getCmp(item);
+            if ( typeof(checkTab) == "undefined" || checkTab.id != item )  {           
+             var newTab = Ext.create('Ext.panel.Panel',{
+                title: item,
+                id: item,    
+                layout:'column',
+                html: '',
+                closable: true,
+                items: []                                         
+             });
+             return 'true';
+            }
+            return 'false'; 
+    }
+    
+    function createMyPanelForSecondTab(itemKey,subItemName) {
+        var subItemPanel = new MyPanel({
+                bodyStyle: bodyStyleForPanel,
+                listeners: {
+                   'render': function(panel) {
+                       panel.body.on('click', function() {
+                               // empty for now
+                       });
+                    }
+                },    
+                    //create custom link in items
+                items: [ 
+                        new itemButtonAsLink({text: subItemName,
+                            handler: function() {
+                               visitUrlForItem(itemKey,subItemName);
+                            }                         
+                        })]
+                                                                           
+            }); 
+        return subItemPanel;    
+    }
+    
+    function buildSubAppTab(item) {        
+         var noDuplicate = buildNewTabForMyTabPanel(item);
+         if(noDuplicate == 'true') {
+             var itemsForNewTab = [];   
+             var newTab= Ext.getCmp(item);
+             for(var key in appPanel[item]) {
+                 var tempPanel = createMyPanelForSecondTab(item,key);
+                 itemsForNewTab.push(tempPanel);
+                 newTab.add(tempPanel);  
+             }
+             newTab.on('close',function() { 
+                var myPanel = Ext.getCmp(item+'1');
+                console.log(myPanel);
+                myPanel.animate({
+                               duration: 100,
+                                to: {
+                                    opacity: 1
+                                }
+                });                 
+             });
+             MyTabPanel.add(newTab);
+             MyTabPanel.doLayout();
+             newTab.doLayout();                     
+             return newTab;
+         }
+    }
+    
+    function returnMenuClickFunc(item,key) {
+                  return  function() {
+                           var keyOutOfFor = key;
+                           urlOutOfFor = appPanel[item][key];
+                           var tabid = item+'_'+key;
+                           var checkTab = Ext.getCmp(tabid);
+                           console.log(key);
+                           if ( typeof(checkTab) == "undefined" || checkTab.id != tabid )  { 
+                                  console.log(tabid);         
+                                  var newTab = Ext.create('Ext.panel.Panel',{
+                                  title: key + ' ('+ item +')',
+                                  id: tabid,    
+                                  layout:'column',
+                                  closable: true,
+                                  items: [],
+                                  html: urlOutOfFor                            
+                                 });
+                           MyTabPanel.add(newTab);  
+                           MyTabPanel.doLayout();    
+                           }
+                 }
+    }        
+    
+    function createMyPanel(item) {    				// closure problem was here
+        var menuForSubItems = [];   
+        var urlOutOfFor;        
+        var tabid;
+        for (key in appPanel[item]) {
+            var menuitem = {text: key,
+                            listeners : {
+                                        click :  returnMenuClickFunc(item,key)  // listener end
+                                    }
+                          }                             
+            menuForSubItems.push(menuitem);
+        }                                          //for loop end
+                
+        var item1 = new MyPanel({            
+            bodyStyle: bodyStyleForPanel,
+            id: item + '1',
+            listeners: {
+               'render': function(panel) {
+                   panel.body.on('click', function() {
+                       if(isButtonClick != 'true'){                        // button click makes this global variable true in button click handler
+                //        panel.body.setStyle('background','white');
+                          buildSubAppTab(item);                            // build subAppTab on body click of custom panel
+                       }
+                       isButtonClick = 'false';                            
+                   });
+                   
+                   panel.body.on('mousedown', function() {
+                       if(isButtonClick != 'true'){                        // button click makes this global variable true in button click handler
+                          panel.body.setStyle('background','#58FAF4');
+                          panel.animate({
+                               duration: 100,
+                                to: {
+                                    opacity: 0.5
+                                }
+                            });                    
+                       }
+                       isButtonClick = 'false';                            
+                   });
+                   
+                   panel.body.on('mouseup', function() {
+                       if(isButtonClick != 'true'){                        
+             //           panel.body.setStyle('background','white');
+             //           "background-image:url({!$Resource.buttonPanel}) !important";
+                          var imageu =  'url({!$Resource.buttonPanel})';
+                          panel.body.applyStyles({'background-image':imageu});
+            /*              panel.animate({
+                               duration: 100,
+                                to: {
+                                    opacity: 1
+                                }
+                            });                    */
+                       }
+                       isButtonClick = 'false';                            
+                   });
+                }
+            },    
+                //create custom link in items
+            items: [ 
+                    new itemButtonAsLink({text: item,
+                        menu: menuForSubItems,
+                        handler: function() {
+                            //   buildSubAppPanel(itemKey);
+                        }                         
+                    })
+            ]                                                                       
+        }); 
+        return item1;       
+    }       
+        
+    buildAppPanel();
+    
+    Ext.create('Ext.Button', {
+        text: 'Click',
+        overCls: 'my-over',
+        border: false,
+        renderTo: Ext.getBody(),
+        handler: function() {
+            alert('You clicked the button!');
+        }
+    });
+    
+    //var temp = Ext.getCmp('Item11').body.applyStyles({ 
+    //                  'background-color':'red',
+    //                  'border': '2px solid blue'
+    //                });
+    // Ext.getCmp('panel-id').body.setStyle('background','lightblue');
+
+});
+ 
+</script>
+
+<div id="a" style="width: 60%; margin: 0px auto;">
+</div>
+
+<div id="b">
+</div>
+
+<a href="url">Link text</a>
+</apex:page>

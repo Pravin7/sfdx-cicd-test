@@ -1,0 +1,27 @@
+<apex:page sidebar="false" controller="GettingStartedController">
+    <!-- Required Styles --> 
+    <apex:stylesheet value="{!URLFOR($Resource.MassUserResources, 'Styles/UserUpdateStyles.css')}"/> 
+    <!-- Header bar -->
+    <div id="headerBlock" class="headerBlock">  
+
+        <apex:image url="{!URLFOR($Resource.MassUserResources, 'Images/people-icon.png')}" styleClass="pepopleLogo"/>              
+        <apex:outputLabel styleClass="title">Mass Activate / Deactivate Users</apex:outputLabel> <br/><br/>            
+    </div>
+    
+    <div style="font-size:14px;margin-left:0px;background-color:#F2F2F3">    
+        <br/>
+        <b>Welcome to Mass Activate Deactivate App</b><br/><br/> 
+ 
+        Mass User Activate App allows System Administrators to activate or deactivate multiple users at once. <br/>Out-of-the-box Salesforce does not provide this functionality. You will have to activate or deactivate users individually or using Apex Data Loader.<br/> 
+        
+        <br/><br/>
+        <b>Next Steps</b><br/>
+        To begin, please navigate to the "Mass Activate/ Deactivate Users" Tab.
+        <br/><br/> 
+        <p>
+        <b>Resources</b><br/>
+        <apex:outputLink value="{!URLFOR($Resource.UserGuide)}" target="_blank">
+        User Guide</apex:outputLink> 
+        </p>
+    </div> 
+</apex:page>

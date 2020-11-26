@@ -1,0 +1,97 @@
+<apex:page >
+<apex:includeScript value="{!URLFOR($Resource.ExtJs4, 'ext-all-debug.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.ExtJs4, '/src/ux/CheckColumn.js')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.ExtJs4, '/resources/css/ext-all.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.checkbcssn, '/checkbcss/CheckHeader.css')}"/>
+
+<script type="text/javascript">
+
+Ext.onReady(function () {
+    Ext.create('Ext.data.Store', {
+        storeId: 'simpsonsStore',
+        fields: ['name', 'email', 'phone','ok'],
+        data: {
+            'items': [{
+                'name': 'Lisa',
+                    "email": "lisa@simpsons.com",
+                    "phone": "555-111-1224"
+            }, {
+                'name': 'Bart',
+                    "email": "bart@simpsons.com",
+                    "phone": "555-222-1234"
+            }, {
+                'name': 'Homer',
+                    "email": "home@simpsons.com",
+                    "phone": "555-222-1244"
+            }, {
+                'name': 'Marge',
+                    "email": "marge@simpsons.com",
+                    "phone": "555-222-1254"
+            }]
+        },
+        proxy: {
+            type: 'memory',
+            reader: {
+                type: 'json',
+                root: 'items'
+            }
+        }
+    });
+    
+    /*
+    var checkmodel = Ext.create('Ext.selection.CheckboxModel', {
+        listeners: {
+            beforeselect: function( panel, record, index, eOpts ) {
+                 console.log(panel);
+                 console.log(record);
+                 console.log(index);
+            }
+        }
+    });
+    */
+    
+    var checkcol = Ext.create('Ext.ux.CheckColumn', {
+        text: 'ok?',
+        dataIndex: 'ok',
+        listeners: {
+            beforecheckchange: function( checkcl, rowIndex, checked, eOpts ) {
+            }        
+        }
+    });
+    
+    Ext.create('Ext.grid.Panel', {
+        title: 'Simpsons',
+//      cls: 'custom-grid',
+        store: Ext.data.StoreManager.lookup('simpsonsStore'),
+//      selModel: checkmodel,
+        columns: [{
+            text: 'Name',
+            dataIndex: 'name',
+            tdCls:"columncls"
+        }, {
+            text: 'Email',
+            dataIndex: 'email',
+            flex: 1,
+             tdCls:"columncls"
+        }, {
+            text: 'Phone',
+            dataIndex: 'phone',
+            tdCls:"columncls"
+        },
+        checkcol
+    
+        ],
+        height: 200,
+        width: 400,
+        listeners:{
+            cellclick:function( grid,td,cellIndex,record,tr,rowIndex,e,eOpts){        
+            }
+        },
+        renderTo: "abc"
+    });
+});
+</script>
+
+<div id="abc">
+</div>
+</apex:page>

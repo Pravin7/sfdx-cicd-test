@@ -1,0 +1,21 @@
+<apex:page sidebar="flase">
+<apex:includeScript value="{!URLFOR($Resource.jquery1_10)}"  />
+<apex:includeScript value="{!URLFOR($Resource.jqueryUI_1_10, '/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js')}"  />
+<apex:stylesheet value="{!URLFOR($Resource.jqueryUI_1_10, '/jquery-ui-1.10.3.custom/css/redmond/jquery-ui-1.10.3.custom.min.css')}"  />
+
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+    $j = jQuery.noConflict();
+    $j(document).ready(function(){
+      $j("button").click(function(){
+        $j("a").animate({left:'250px', opacity:0.1});
+      });
+    });
+});    
+</script>
+
+<div id="a">
+<button>Start Animation</button>
+</div>
+</apex:page>

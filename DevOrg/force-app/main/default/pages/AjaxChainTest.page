@@ -1,0 +1,96 @@
+<apex:page >
+    <apex:includeScript value="{!URLFOR($Resource.jquery1_10)}"  />
+    <script type="text/javascript">
+    
+    /*
+        function Task(taskname, taskstatus) {
+            return $.Deferred(function(dfd){
+                insertTask(taskname, taskstatus, function(txt, result){
+                    if(result.rowsAffected) {
+                        console.log(taskname + ‘ successfully saved.’);
+                        dfd.resolve(true);
+                        return true;
+                    }
+                    console.log(taskname + ‘ failed.’);
+                    dfd.reject(false);
+                });            
+            }
+        }
+   
+    
+
+    
+         function fun2() {
+            return $.Deferred(function(dfd){
+              console.log('fun2');                                
+                        dfd.resolve(true);
+                });            
+            }
+    
+         function fun3() {
+            return $.Deferred(function(dfd){
+              console.log('fun3');                                
+                        dfd.resolve(true);
+                });            
+            }    
+    
+    
+        jQuery(document).ready(function(){
+            $j = jQuery.noConflict();
+            var AjaxQ = [];
+                AjaxQ[0] =          function fun1() {
+                                        return $.Deferred(function(){
+                                          console.log('fun1');                
+                                            });            
+                                        }
+                AjaxQ[1] =          function fun2() {
+                                        return $.Deferred(function(){
+                                          console.log('fun2');                                
+                                            });            
+                                        }
+                AjaxQ[2] =          function fun3() {
+                                        return $.Deferred(function(){
+                                          console.log('fun3');                                
+                                            });            
+                                        }
+             console.log(AjaxQ);        
+            $j.when.apply( AjaxQ ).then(alert('done'), alert('not done'));             
+        });     
+     */
+    
+        jQuery(document).ready(function(){
+            $j = jQuery.noConflict();    
+               function Task1() {
+                    return $j.Deferred(function(dfd){
+                       alert('1');
+					   dfd.resolve(true);
+                    }).promise();
+                }
+                
+               function Task2() {
+                    return $j.Deferred(function(dfd){
+                       alert('2');
+					   dfd.resolve(true);
+                    }).promise();
+                }   
+            
+                function Task3() {
+                var dfd = new jQuery.Deferred();
+                       alert('3');
+					   dfd.reject(false);
+                   return dfd.promise();
+                }   
+            
+            $j.when(Task1(), Task2(),Task3()).then(  function( status ) {
+                                                alert( status + ", things are going well" );
+                                            }
+                                           , function( status ) {
+                                                alert( status + ", fail" );
+                                            }); 
+            
+            
+            
+      });
+    </script>
+
+</apex:page>

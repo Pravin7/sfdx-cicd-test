@@ -1,0 +1,20 @@
+<apex:page controller="uploadCSVcontroller" >
+  <apex:form >
+  <apex:inputFile value="{!contentFile}" filename="{!nameFile}" /><br/>
+  <apex:commandButton value="Upload" id="theButton"/>
+  </apex:form>
+  <apex:outputPanel id="results">
+  <p>nameFile: {!nameFile}</p>
+  <p>rowCount: {!rowCount}</p>
+  <p>colCount: {!colCount}</p>
+    <table title="CSV Output" border="1" width="100%">
+       <apex:repeat value="{!results}" var="row">
+           <tr>
+               <apex:repeat value="{!row}" var="cell">
+                   <td> {!cell} </td>
+               </apex:repeat>
+           </tr>
+       </apex:repeat>
+     </table>
+  </apex:outputPanel>
+</apex:page>

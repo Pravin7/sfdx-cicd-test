@@ -1,0 +1,66 @@
+<apex:page showHeader="false">
+    
+    <script type="text/javascript" src="{!URLFOR($Resource.SalesforceCanvasJavascriptSDK,'SalesforceCanvasJavascriptSDK-master/js/canvas-all.js')}" />
+    
+    <script type="text/javascript">
+        
+        var sid="{!GETSESSIONID()}".substr(1,30) +'...';
+    
+        function refreshSR(){
+            console.log('refreshing token');
+            Sfdc.canvas.client.refreshSignedRequest(function(data){
+                console.log('data');
+                console.log(data);
+                if(data.status == 200){
+                    console.log('status ok');
+                    var signedRequest = data.payload.response;
+                    var part = signedRequest.split('.')[1];
+                    console.log('part');
+                    console.log(part);
+                    var obj = JSON.parse(Sfdc.canvas.decode(part));
+                    updateDisplay(obj) ;
+                } 
+            }); 
+        }
+    
+    function updateDisplay(obj){
+        console.log('obj');
+        console.log(obj);
+        setValue('spSessionId', sid);
+        setValue('ipOAuth', obj.client.oauthToken.substr(1,30)+'...');
+        setValue('ipUser', obj.context.user.fullName);
+        setValue('ipOrg', obj.context.organization.name);
+        setValue('ipRefresh', obj.client.refreshToken.substr(1,30)+'...');
+    }
+    
+    function setValue(eleId,val)
+    {
+        var domEl = document.getElementById(eleId);
+        if(domEl){
+            domEl.innerHTML = val;    
+        }
+    }
+    
+    Sfdc.canvas.onReady(function(){
+        refreshSR();
+    });
+         
+    </script>
+          
+        <b> <u> Service Provider Org </u></b>  
+        I am Canvas App from Salesforce Domain <b> pravin.shivle@gmail.com </b>      
+        User : {!$User.FirstName} {!$User.LastName} 
+        Org : {!$Organization.Name}
+        Session Id : <span id="spSessionId"></span>    
+
+<hr />
+ 
+        <b> <u> Identity Provider Org  - Current Org </u> </b>
+        User : <span id="ipUser"></span>
+         Org : <span id="ipOrg"></span>
+         OAUth Token : <span id="ipOAuth"></span>
+        Refresh Token : <span id="ipRefresh"></span>
+        
+        <input id="refresh" type="button" value="Refresh SR" onclick="refreshSR();"/>
+     
+</apex:page>
