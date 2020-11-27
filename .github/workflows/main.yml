@@ -21,7 +21,7 @@ jobs:
               uses: tiagonnascimento/sfdx-orgdev-build-deploy@v2
               with:
                 type: 'sandbox'
-                certificate_path: DevOrg/assests/server.key.enc
+                certificate_path: DevOrg/assets/server.key.enc
                 decryption_key: ${{ secrets.DECRYPTION_KEY_NON_PRODUCTIVE }}
                 decryption_iv: ${{ secrets.DECRYPTION_IV_NON_PRODUCTIVE }}
                 client_id: ${{ secrets.CONSUMER_KEY_TI01 }}
