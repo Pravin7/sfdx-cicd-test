@@ -27,6 +27,6 @@ jobs:
                 client_id: ${{ secrets.CONSUMER_KEY }}
                 username: ${{ secrets.USERNAME }}
                 checkonly: true
-                manifest_path: manifest/package-01.xml,manifest/package-02.xml,manifest/package-03.xml
-                destructive_path: releases/01_releases/destructive
+                manifest_path: DevOrg/manifest/package-01.xml,manifest/package-02.xml,manifest/package-03.xml
+                destructive_path: DevOrg/releases/01_releases/destructive
                 #data_factory: scripts/apex/CreateBaseData.apex
