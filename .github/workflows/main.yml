@@ -20,7 +20,7 @@ jobs:
             - name: 'sfdx-orgdev-build-deploy'
               uses: tiagonnascimento/sfdx-orgdev-build-deploy@v1.1
               with:
-                type: 'sandbox'
+                type: 'production'
                 certificate_path: DevOrg/assets/server.key.enc
                 decryption_key: ${{ secrets.DECRYPTION_KEY }}
                 decryption_iv: ${{ secrets.DECRYPTION_IV }}
