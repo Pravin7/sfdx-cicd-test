@@ -17,16 +17,16 @@ jobs:
             - name: 'Checkout source code'
               uses: actions/checkout@v2
 
-            - name: sfdx-orgdev-build-deploy
-              uses: tiagonnascimento/sfdx-orgdev-build-deploy@v2
+            - name: 'sfdx-orgdev-build-deploy'
+              uses: tiagonnascimento/sfdx-orgdev-build-deploy@v1.1
               with:
-                type: 'sandbox'
+                type: 'production'
                 certificate_path: DevOrg/assets/server.key.enc
-                decryption_key: ${{ secrets.DECRYPTION_KEY_NON_PRODUCTIVE }}
-                decryption_iv: ${{ secrets.DECRYPTION_IV_NON_PRODUCTIVE }}
-                client_id: ${{ secrets.CONSUMER_KEY_TI01 }}
-                username: ${{ secrets.USERNAME_TI01 }}
+                decryption_key: ${{ secrets.DECRYPTION_KEY }}
+                decryption_iv: ${{ secrets.DECRYPTION_IV }}
+                client_id: ${{ secrets.CONSUMER_KEY }}
+                username: ${{ secrets.USERNAME }}
                 checkonly: true
-                manifest_path: manifest/package-01.xml,manifest/package-02.xml,manifest/package-03.xml
-                destructive_path: releases/01_releases/destructive
+                manifest_path: DevOrg/manifest/package-01.xml,manifest/package-02.xml,manifest/package-03.xml
+                destructive_path: DevOrg/releases/01_releases/destructive
                 #data_factory: scripts/apex/CreateBaseData.apex
