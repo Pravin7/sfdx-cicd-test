@@ -1,0 +1,33 @@
+# Unique name for this workflow
+name: PROD
+
+# Definition when the workflow should run
+on:
+    workflow_dispatch:
+        branches:
+            - main
+
+# Jobs to be executed
+jobs:
+    build-deploy:
+        runs-on: ubuntu-latest
+        steps:
+
+            # Checkout the code in the pull request
+            - name: 'Checkout source code'
+              uses: actions/checkout@v2
+
+            - name: 'Build and Deploy'
+              uses: tiagonnascimento/sfdx-orgdev-build-deploy@v2
+              with:
+                type: 'production'
+                certificate_path: assets/server.key.enc
+                decryption_key: ${{ secrets.DECRYPTION_KEY }}
+                decryption_iv: ${{ secrets.DECRYPTION_IV }}
+                client_id: ${{ secrets.CONSUMER_KEY }}
+                username: ${{ secrets.USERNAME }}
+                checkonly: true
+                manifest_path: manifest/package-baseDeploy.xml
+                deploy_testlevel: NoTestRun
+                #destructive_path: releases/01_releases/destructive
+                #data_factory: scripts/apex/CreateBaseData.apex
