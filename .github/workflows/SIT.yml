@@ -29,5 +29,5 @@ jobs:
                 checkonly: false
                 manifest_path: manifest/package-baseDeploy.xml
                 deploy_testlevel: NoTestRun
-                destructive_path: releases/01_releases/destructive
+                #destructive_path: releases/01_releases/destructive
                 #data_factory: scripts/apex/CreateBaseData.apex
