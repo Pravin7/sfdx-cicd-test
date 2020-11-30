@@ -17,8 +17,8 @@ jobs:
             - name: 'Checkout source code'
               uses: actions/checkout@v2
 
-            - name: 'sfdx-orgdev-build-deploy'
-              uses: tiagonnascimento/sfdx-orgdev-build-deploy@v1.1
+            - name: 'Build and Deploy'
+              uses: tiagonnascimento/sfdx-orgdev-build-deploy@v2
               with:
                 type: 'production'
                 certificate_path: assets/server.key.enc
