@@ -26,7 +26,7 @@ jobs:
                 decryption_iv: ${{ secrets.DECRYPTION_IV }}
                 client_id: ${{ secrets.CONSUMER_KEY }}
                 username: ${{ secrets.USERNAME }}
-                checkonly: true
+                checkonly: false
                 manifest_path: manifest/package-baseDeploy.xml
                 deploy_testlevel: NoTestRun
                 #destructive_path: releases/01_releases/destructive
