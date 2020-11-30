@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Insert_Merchandise_Price</fullName>
+        <description>Insert Merchandise Price</description>
+        <field>Unit_Price__c</field>
+        <formula>Merchandise1__r.Price__c</formula>
+        <name>Insert Merchandise Price</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Stock_Inventory1</fullName>
+        <description>Update Stock Inventory</description>
+        <field>Total_Inventory__c</field>
+        <formula>IF( ISNEW(), Merchandise1__r.Total_Inventory__c  -  Units_Sold__c,  Merchandise1__r.Total_Inventory__c - ( Units_Sold__c - PRIORVALUE( Units_Sold__c )))</formula>
+        <name>Update Stock Inventory1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+        <targetObject>Merchandise1__c</targetObject>
+    </fieldUpdates>
+    <rules>
+        <fullName>Line Item Created</fullName>
+        <actions>
+            <name>Insert_Merchandise_Price</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <description>Line Item Created Rule.</description>
+        <formula>true</formula>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Line Item Updated1</fullName>
+        <actions>
+            <name>Update_Stock_Inventory1</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Invoice_Statement1__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Open</value>
+        </criteriaItems>
+        <description>Line Item Updated1</description>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>
